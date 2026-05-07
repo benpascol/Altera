@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CoreYield: Smart Life</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_tasks">Tasks</string>
+    <string name="nav_finance">Finance</string>
+</resources>

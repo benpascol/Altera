@@ -1,0 +1,39 @@
+# Root .gitignore for Altera Core
+
+# Flutter/Dart
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/coverage/
+**/doc/api/
+**/.metadata
+
+# Android/iOS specific
+**/android/**/generated/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+**/ios/Flutter/.last_build_id
+**/*.iml
+**/*.ipr
+**/*.iws
+.idea/
+.vscode/
+
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/.venv
+**/venv/
+**/ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

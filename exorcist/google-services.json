@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "667282952202",
+    "project_id": "core-yield",
+    "storage_bucket": "core-yield.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667282952202:android:784c3cf98ca4ee075acff3",
+        "android_client_info": {
+          "package_name": "com.example.coreyield"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChWyyu1lsLG3I_vm0-D54D_84qG17vyeY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
