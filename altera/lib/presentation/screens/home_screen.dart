@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../features/auth/presentation/providers/auth_providers.dart';
+import '../../core/theme/app_colors.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authStateProvider);
+    final user = authState.value;
+
     return Scaffold(
+      backgroundColor: AppColors.obsidian,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -20,40 +27,69 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Good Morning,",
+                        "Welcome back,",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.grey,
+                              color: Colors.white54,
                             ),
                       ),
                       Text(
-                        "Boss Pascol",
+                        user?.fullName ?? "Boss",
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                       ),
                     ],
                   ),
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                    child: const Icon(Icons.person, color: Colors.indigo),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Sign Out'),
+                          content: const Text('Are you sure you want to exit Altera?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('CANCEL'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ref.read(authControllerProvider.notifier).signOut();
+                                Navigator.pop(context);
+                              },
+                              child: const Text('SIGN OUT', style: TextStyle(color: Colors.red)),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: AppColors.emerald.withAlpha(30),
+                      child: const Icon(Icons.logout, color: AppColors.emerald),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 32),
 
-              // AI Insight Card
+              // AI Insight Card (Glassmorphic)
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary.withBlue(200),
-                    ],
+                  gradient: const LinearGradient(
+                    colors: [AppColors.emerald, AppColors.tealCustom],
                   ),
                   borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.emerald.withAlpha(50),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +110,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      "Your stress level is predicted to rise this afternoon. Consider rescheduling your 3 PM meeting.",
+                      "Your productivity was peak yesterday. Keep the momentum for today's research session.",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -85,14 +121,15 @@ class HomeScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.2),
+                        backgroundColor: Colors.white.withAlpha(50),
                         foregroundColor: Colors.white,
                         elevation: 0,
+                        minimumSize: const Size(120, 40),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text("Action Guide"),
+                      child: const Text("View Details"),
                     ),
                   ],
                 ),
@@ -106,10 +143,10 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: _buildStatCard(
                       context,
-                      "Remaining",
+                      "Budget",
                       "Rp 2.4M",
                       Icons.account_balance_wallet,
-                      Colors.teal,
+                      AppColors.emerald,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -127,27 +164,26 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              // Upcoming Task List
+              // Upcoming Schedule
               Text(
-                "Upcoming Schedule",
+                "Active Tasks",
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
               ),
               const SizedBox(height: 16),
-              _buildTaskItem(context, "Research Methodology", "10:00 AM - 12:00 PM", true),
-              _buildTaskItem(context, "Meeting with Supervisor", "02:00 PM - 03:00 PM", false),
+              _buildTaskItem(context, "Setup Supabase RLS", "High Priority", true),
+              _buildTaskItem(context, "Implement Altera UI", "Ongoing", false),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Navigasi ke Chat Screen nanti
-        },
+        onPressed: () {},
         label: const Text("Talk to Altera"),
         icon: const Icon(Icons.chat_bubble_outline),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: AppColors.emerald,
         foregroundColor: Colors.white,
       ),
     );
@@ -157,9 +193,9 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: AppColors.glassBase,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withAlpha(20)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,39 +204,39 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             title,
-            style: const TextStyle(color: Colors.grey, fontSize: 12),
+            style: const TextStyle(color: Colors.white54, fontSize: 12),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTaskItem(BuildContext context, String title, String time, bool isDone) {
+  Widget _buildTaskItem(BuildContext context, String title, String subtitle, bool isDone) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: AppColors.glassBase,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withAlpha(20)),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: isDone ? Colors.teal.withAlpha(25) : Colors.blue.withAlpha(25),
+              color: isDone ? AppColors.emerald.withAlpha(30) : Colors.blue.withAlpha(30),
               shape: BoxShape.circle,
             ),
             child: Icon(
               isDone ? Icons.check : Icons.access_time,
               size: 16,
-              color: isDone ? Colors.teal : Colors.blue,
+              color: isDone ? AppColors.emerald : Colors.blue,
             ),
           ),
           const SizedBox(width: 16),
@@ -210,11 +246,11 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 Text(
-                  time,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  subtitle,
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
                 ),
               ],
             ),
